@@ -25,7 +25,7 @@ class OfficeConverter
      * @param string      $bin
      * @param bool        $prefixExecWithExportHome
      */
-    public function __construct($filename, $tempPath = null, $bin = 'libreoffice', $prefixExecWithExportHome = true)
+    public function __construct($filename, $tempPath = null, $bin = 'soffice', $prefixExecWithExportHome = true)
     {
         if ($this->open($filename)) {
             $this->setup($tempPath, $bin, $prefixExecWithExportHome);
@@ -240,10 +240,7 @@ class OfficeConverter
         // Cannot use $_SERVER superglobal since that's empty during UnitUnishTestCase
         // getenv('HOME') isn't set on Windows and generates a Notice.
         if ($this->prefixExecWithExportHome) {
-            $home = getenv('HOME');
-            if (!is_writable($home)) {
-                $cmd = 'export HOME=/tmp && '.$cmd;
-            }
+            $cmd = 'set HOME=/tmp && '.$cmd;
         }
         $process = proc_open($cmd, [0 => ['pipe', 'r'], 1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes);
 
